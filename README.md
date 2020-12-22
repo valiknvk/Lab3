@@ -39,8 +39,6 @@ import random
 import threading
 import matplotlib.pyplot as plt
 
-print('hello')
-
 global graph, model
 graph = tf.compat.v1.get_default_graph()
 tf.compat.v1.disable_eager_execution()
