@@ -161,3 +161,45 @@ for i in range(len(output)):
 #f.close
 plt.plot(np.array(lostEp))
 plt.savefig('D:\\pictures\\Loss_Val.png')
+
+
+Был подготовлен набор из 50000 изображений. 
+Ссылка: https://drive.google.com/drive/folders/1mfLdcCV5Vogud55PE9YW1k9CtUVS9cJY?usp=sharing
+Все изображение приводились к одному размеру (256х256) и затем использованы для обучения. 
+Скрипт для изменения размеров изображений.
+from multiprocessing.dummy import Pool
+from multiprocessing.sharedctypes import Value
+from ctypes import c_int
+import time, cv2, os
+
+wdir = r'D:\\pictures\\50'
+os.chdir(wdir)
+#newDir = r'D:\pictures\test1'
+def read_imagecv2(img_path, counter):
+    # print(img_path)
+    img = cv2.imread(img_path)
+    img = cv2.resize(img, (256, 256))
+    #cv2.imwrite('resized_'+img_path, img) #write the image in the child process (I didn't want to overwrite my images)
+    #cv2.imwrite(r'D:\\pictures\\test\\'+img_path, img)
+    cv2.imwrite(img_path, img)
+    #print(img_path)
+    #print(img)
+    with counter.get_lock(): #processing pools give no way to check up on progress, so we make our own
+        counter.value += 1
+
+if __name__ == '__main__':
+    # start 4 worker processes
+    with Pool(processes=4) as pool: #this should be the same as your processor cores (or less)
+        counter = Value(c_int, 0) #using sharedctypes with mp.dummy isn't needed anymore, but we already wrote the code once...
+        chunksize = 4 #making this larger might improve speed (less important the longer a single function call takes)
+        result = pool.starmap_async(read_imagecv2, #function to send to the worker pool
+                                    ((file, counter) for file in os.listdir(os.getcwd()) if file.endswith('.jpeg')),#or jpg  #generator to fill in function args
+                                    chunksize) #how many jobs to submit to each worker at once
+        while not result.ready(): #print out progress to indicate program is still working.
+            #with counter.get_lock(): #you could lock here but you're not modifying the value, so nothing bad will happen if a write occurs simultaneously
+            #just don't 'time.sleep()' while you're holding the lock
+            print("\rcompleted {} images   ".format(counter.value), end='')
+            time.sleep(.5)
+        print('\nCompleted all images')
+
+
