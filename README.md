@@ -1,5 +1,5 @@
 #Скрипт для обучения
-
+```
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -161,7 +161,7 @@ for i in range(len(output)):
 #f.close
 plt.plot(np.array(lostEp))
 plt.savefig('D:\\pictures\\Loss_Val.png')
-
+```
 
 Был подготовлен набор из 50000 изображений. 
 Ссылка: https://drive.google.com/drive/folders/1mfLdcCV5Vogud55PE9YW1k9CtUVS9cJY?usp=sharing
