@@ -166,6 +166,8 @@ plt.savefig('D:\\pictures\\Loss_Val.png')
 Был подготовлен набор из 50000 изображений. 
 Ссылка: https://drive.google.com/drive/folders/1mfLdcCV5Vogud55PE9YW1k9CtUVS9cJY?usp=sharing
 Все изображение приводились к одному размеру (256х256) и затем использованы для обучения. 
+Произвести обработку всех изображений, используя персональный ноутбук, не получилось.
+
 Скрипт для изменения размеров изображений.
 from multiprocessing.dummy import Pool
 from multiprocessing.sharedctypes import Value
